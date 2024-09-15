@@ -1,0 +1,14 @@
+When to use nodejs?
+1. I/O bound
+2. Data streaming
+3. Real time chat aplication
+4. console.log() => is not a javascript language, its chrome V8 engine.
+5. to run index.js => node index.js
+
+MAKE YOU OWN SCTIPT
+"scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "youtube": "node hello.js" 
+  },
+
+  in terminal: npm run youtube => so it will start running node hello.js
