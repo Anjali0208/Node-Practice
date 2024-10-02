@@ -7,6 +7,28 @@ const app = express();
 // middleware
 app.use(express.urlencoded({ extended: false }));
 
+app.use((req, res, next) => {
+  console.log("hello from middleware 1");
+  // return res.send({ msg: "hello" });
+  next();
+});
+
+app.use((req, res, next) => {
+  console.log("hello from middleware 2");
+  next();
+});
+
+app.use((req, res, next) => {
+  fs.appendFile(
+    "log.txt",
+    `\n${Date.now()} ${req.method} ${req.ip} ${req.path} ${req.url}`,
+    (err, date) => {
+      next();
+    }
+  );
+  // next();
+});
+
 // if rendering html page
 app.get("/users", (req, res) => {
   const html = `
@@ -30,9 +52,7 @@ app
   .get((req, res) => {
     const id = Number(req.params.id);
     const user = users.find((u) => u.id === id);
-    if (!user) {
-      return res.status(404).json({ error: "User not found" });
-    }
+
     return res.send(user);
   })
   .patch((req, res) => {
@@ -61,15 +81,6 @@ app
 
 app.post("/api/user", (req, res) => {
   const body = req.body;
-  if (
-    !body ||
-    !body.first_name ||
-    !body.last_name ||
-    !body.email ||
-    !body.gender
-  ) {
-    return res.status(400).json({ message: "Fill the whole fields" });
-  }
   users.push({ id: users.length + 1, ...body });
   fs.writeFile("./MOCK_DATA.json", JSON.stringify(users), (err, data) => {
     return res.send({ status: "success", id: users.length });
