@@ -26,7 +26,6 @@ app.use((req, res, next) => {
       next();
     }
   );
-  // next();
 });
 
 // if rendering html page
